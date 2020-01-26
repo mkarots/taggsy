@@ -1,4 +1,5 @@
 
+
 class Taggy:
 
     def __init__(self, database=None, word_counter=None):
