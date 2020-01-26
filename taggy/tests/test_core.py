@@ -14,9 +14,8 @@ class TestAddText(TaggyCoreTests):
         with self.assertRaises(NotImplementedError):
             self.taggy.add_text(text='')
 
-
 class TestGetTags(TaggyCoreTests):
-
+    
     def test_raises_not_implemented(self):
         with self.assertRaises(NotImplementedError):
             self.taggy.get_tags(document_ids=[])
