@@ -1,3 +1,13 @@
-*.pyc
-__pycache__
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+
+# Virtualenv 
 .env/
+
+# Tests
+nosetests.xml
+
+# Flask stuff:
+instance/
+.webassets-cache
