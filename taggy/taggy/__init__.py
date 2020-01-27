@@ -1,2 +1,1 @@
-from .core import Taggy
-from .helpers import WordCounter
+from .core import Core, Word, Sentence, Document

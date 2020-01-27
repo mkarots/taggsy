@@ -1,14 +1,112 @@
+from .helpers import is_word, is_stopword, filter_stopwords, generate_random_string
+
+SENTENCE_SEPARATOR = '.'
+
+class CoreModel:
+    
+    def __init__(self):
+        self.should_recompute = True
+
+    def _compute(self):
+        raise NotImplementedError('Subclasses should implement this method')
+
+    def compute(self, *args, **kwargs):
+        '''
+        Wrapper for the compute function
+        '''
+        if self.should_recompute:
+            self.should_recompute = False
+            return self._compute(*args, **kwargs)
+            
+
+class Word(CoreModel):
+
+    def __init__(self, text=None, sentence_text=None, document=None):
+        super().__init__()
+        self.text = text if text is not None else None
+        self.sentence_text = sentence_text if sentence_text is not None else None
+        self.document = document if document else []
+    
+    @classmethod
+    def from_text(cls, text, sentence_text, document):
+        return cls(text=text, sentence_text=sentence_text, document=document)
+
+    def _compute(self, table):
+        if not self.document: raise 
+        if self.text in table:
+            table[self.text]['docs'].append(self.document.name)
+            table[self.text]['sentences'].append(self.sentence_text)
+        else:
+            table[self.text] = {'docs': [self.document.name], 'sentences': [self.sentence_text]}
+        return table
+
+    def __hash__(self):
+        return hash(self.text)
+    
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.name == other.name
 
 
-class Taggy:
+class Sentence(CoreModel):
 
-    def __init__(self, database=None, word_counter=None):
-        self.database = database if database else {}
-        self.word_counter = word_counter
+    def __init__(self, text=None, words=None, document=None):
+        super().__init__()
+        self.text = text if text is not None else ''
+        self.words = words if words is not None else []
+        self.document = document if document is not None else None
 
-    def add_text(self, text):
-        raise NotImplementedError()
+    def _compute(self, table):
+        for word in self.words:
+            word.compute(table=table)
 
-    def get_tags(self, document_ids):
-        raise NotImplementedError()
+    @classmethod
+    def from_text(cls, text, document):
+        return cls(text=text, 
+            words=[Word.from_text(text=word, sentence_text=text, document=document) for word in filter_stopwords(words=text.split())])
+
+
+class Document(CoreModel):
+    
+    def __init__(self, name=None, text=None, sentences=None):
+        super().__init__()
+        self.name = name if name is not None else generate_random_string()
+        self.sentences = sentences if sentences is not None else []
+        self.text = text if text is not None else ''
+
+    def _compute(self, table):
+        for sentence in self.sentences:
+            sentence.compute(table=table)
+
+    @classmethod
+    def from_path(cls, path):
+        return cls.from_text(text=open(file_path, 'r').read())
+
+    @classmethod
+    def from_text(cls, text, name=None):
+        document = cls(text=text, name=name)
+        document.sentences = [Sentence.from_text(document=document, text=dot_seperated_string) for dot_seperated_string in text.split(SENTENCE_SEPARATOR)]
+        return document
+        
+
+class Core(CoreModel):
+
+    def __init__(self, documents=None):
+        super().__init__()
+        self.table = {}
+        self.documents = documents if documents is not None else []
+
+    def add_document(self, text, name=None):
+        document = Document.from_text(text=text, name=name)
+        self.documents.append(document)
+        self.should_recompute = True
+        return document.name
+
+    def most_common(self):
+        return self.compute()
+
+    def _compute(self):
+        for document in self.documents:
+            document.compute(table=self.table)
+        return {k: v for k,v in self.table.items() if len(v['docs']) == len(self.documents)}
+
 
