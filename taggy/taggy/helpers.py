@@ -18,6 +18,7 @@ def filter_stopwords(words):
     filtered_stopwords = []
     for word in words:
         word = word.strip().lower()
+        word = word.translate(str.maketrans('', '', string.punctuation))
         if is_word(word) and not is_stopword(word): filtered_stopwords.append(word)
     return filtered_stopwords
 

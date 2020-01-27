@@ -35,12 +35,13 @@ class Word(CoreModel):
         return cls(text=text, sentence_text=sentence_text, document=document)
 
     def _compute(self, table):
-        if not self.document: raise 
         if self.text in table:
-            table[self.text]['docs'].append(self.document.name)
-            table[self.text]['sentences'].append(self.sentence_text)
+            if self.document.name not in table[self.text]['docs']:
+                table[self.text]['docs'].append(self.document.name)
+                table[self.text]['sentences'].append(self.sentence_text)
+                table[self.text]['count'] += 1
         else:
-            table[self.text] = {'docs': [self.document.name], 'sentences': [self.sentence_text]}
+            table[self.text] = {'count': 1, 'docs': [self.document.name], 'sentences': [self.sentence_text]}
         return table
 
     def __hash__(self):
@@ -60,7 +61,8 @@ class Sentence(CoreModel):
 
     def _compute(self, table):
         for word in self.words:
-            word.compute(table=table)
+            table = word.compute(table=table)
+        return table
 
     @classmethod
     def from_text(cls, text, document):
@@ -78,18 +80,19 @@ class Document(CoreModel):
 
     def _compute(self, table):
         for sentence in self.sentences:
-            sentence.compute(table=table)
+            table = sentence.compute(table=table)
+        return table
 
     @classmethod
     def from_path(cls, path):
-        return cls.from_text(name=os.path.basename(file_path), text=open(file_path, 'r').read())
+        return cls.from_text(name=os.path.basename(path), text=open(path, 'r').read())
 
     @classmethod
     def from_text(cls, text, name=None):
         document = cls(text=text, name=name)
         document.sentences = [Sentence.from_text(document=document, text=dot_seperated_string) for dot_seperated_string in text.split(SENTENCE_SEPARATOR)]
         return document
-        
+    
 
 class Core(CoreModel):
 
@@ -98,8 +101,11 @@ class Core(CoreModel):
         self.table = {}
         self.documents = documents if documents is not None else []
 
-    def add_document(self, text, name=None):
-        document = Document.from_text(text=text, name=name)
+    def add_document(self, path=None, text=None, name=None):
+        if path:
+            document = Document.from_path(path=path)
+        elif text:
+            document = Document.from_text(text=text, name=name)
         self.documents.append(document)
         self.should_recompute = True
         return document.name
@@ -109,7 +115,7 @@ class Core(CoreModel):
 
     def _compute(self):
         for document in self.documents:
-            document.compute(table=self.table)
-        return {k: v for k,v in self.table.items() if len(v['docs']) == len(self.documents)}
-
+            table = document.compute(table=self.table)
+        results = {k: v for k,v in self.table.items() if v['count'] > 2}
+        return {k: v for k, v in sorted(results.items(), key=lambda x: x[1].get('count'), reverse=True)}
 
