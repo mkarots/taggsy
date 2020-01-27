@@ -1,6 +1,9 @@
+import os
+
 from .helpers import is_word, is_stopword, filter_stopwords, generate_random_string
 
 SENTENCE_SEPARATOR = '.'
+
 
 class CoreModel:
     
@@ -79,7 +82,7 @@ class Document(CoreModel):
 
     @classmethod
     def from_path(cls, path):
-        return cls.from_text(text=open(file_path, 'r').read())
+        return cls.from_text(name=os.path.basename(file_path), text=open(file_path, 'r').read())
 
     @classmethod
     def from_text(cls, text, name=None):
