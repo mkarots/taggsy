@@ -3,6 +3,27 @@
 The end goal is to have a software package that can generate hashtags based on common words between different texts/documents, in an efficient way, i.e, given 2 documents that contain "This is a hashtag", "Create hashtag today" the output, should contain the word 'hashtag', a reference to the documents it is contained, and a reference of the sentences it is contained in.
 
 
+## Requirements
+  
+  ### Functional requirements:
+
+  * Software should compute the most common occurring words between 2 or more documents.
+  
+  ### Non functional requirements:
+
+* Implementation language: python
+
+* Compatible platforms: Linux/MacOS
+
+* API should be straighforward to use
+
+* Should be usable both programmatically and as a script
+
+* Library format: python package
+
+* Output is in json/python dictionary format
+
+
 ## Challenges
 
 * **Avoiding unnecessary calculations** 
@@ -72,32 +93,11 @@ b) We need not care about a word if it appears twice on the same document
 
 
 ### Filtering out words:
-There are two kinds of filtering involved 
+There are two filtering steps:
 
-* a) Filtering of non-words 
-    We need to filter non-words so we get left with the actual words. Initially, the text will be split, into sentences using the dot '.' as a sentence separator. After this step, the rest of the punctuation is ignored.
-
-
-* b) Filtering of stopwords
-    We need to filter out stopwords, so we are left with the non-common words in the texts. This can easy be done by using an existing library like nltk or spacy. 
+a) We need to filter non-words so we get left with the actual words. Initially, the text will be split, into sentences using the dot '.' as a sentence separator. After this step, the rest of the punctuation is ignored.
 
 
-## Requirements
-  
-  ### Functional requirements:
+b) We need to filter out stopwords, so we are left with the non-common words in the texts. This can easy be done by using an existing library like nltk or spacy. 
 
-  * Software should compute the most common occurring words between 2 or more documents.
-  
-  ### Non functional requirements:
 
-* Implementation language: python
-
-* Compatible platforms: Linux/MacOS
-
-* API should be straighforward to use
-
-* Should be usable both programmatically and as a script
-
-* Library format: python package
-
-* Output is in json/python dictionary format
