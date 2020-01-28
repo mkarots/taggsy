@@ -31,6 +31,23 @@ Given that even a medium sized document can contain thousands of characters, we 
 * **Not all words are of the same importance/value**. For example stopwords like 'is', 'are', 'and' do not provide value as it they are very common, and to be found in almost all texts.
 
 
+### Avoiding unnecessary calculations:
+In order to avoid unncessary calculations, we need to make use of the following two insights: 
+
+a) Every document should only be counted once.
+
+b) We need not care about a word if it appears twice on the same document.
+
+
+### Filtering out words:
+There are two filtering steps:
+
+a) We need to filter non-words so we get left with the actual words. Initially, the text will be split, into sentences using the dot '.' as a sentence separator. After this step, the rest of the punctuation is ignored.
+
+
+b) We need to filter out stopwords, so we are left with the non-common words in the texts. This can easy be done by using an existing library like nltk or spacy. 
+
+
 ## Proposed Solutions
 
 Overview of solution(pseudocode):
@@ -83,21 +100,6 @@ class DocumentComponent:
             return self._compute(*args, **kwargs)
 ```
 
-Classes are now responsible for setting the `should_recompute` parameter in order to avoid unnecesary computations.
-
-
-### Avoiding unnecessary calculations:
-In order to avoid unncessary calculations, we need to make use of the following two insights: 
-a) Every document should only be counted once.
-b) We need not care about a word if it appears twice on the same document
-
-
-### Filtering out words:
-There are two filtering steps:
-
-a) We need to filter non-words so we get left with the actual words. Initially, the text will be split, into sentences using the dot '.' as a sentence separator. After this step, the rest of the punctuation is ignored.
-
-
-b) We need to filter out stopwords, so we are left with the non-common words in the texts. This can easy be done by using an existing library like nltk or spacy. 
+Classes are now responsible for setting the `should_recompute` parameter in order to avoid unnecesary computations. For example, the document class, sets it after a new document is added to the core, which signals that the computation needs to run again. 
 
 
