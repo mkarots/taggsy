@@ -4,11 +4,13 @@
 
 # python eggs
 *.egg-info
+
 # Virtualenv
 **.env/
 
 # Tests
 nosetests.xml
+local_testing.py
 
 # vscode
 .vscode/
