@@ -12,7 +12,21 @@ text1 = 'An example document'
 text2 = 'Another document'
 
 core.add_documents([text1, text2])
-core.most_common()
+print(core.most_common())
+
+>>> {'document': 
+    {'count': 2,
+     'docs': ['fbyzuj', 'ktbuwx'],
+     'sentences': ['An example document', 'Another document']}}
+```
+
+Or run as python module
+
+```shell
+
+pip install . 
+
+python -mtaggsy doc1.txt doc2.txt 
 ```
 
 
