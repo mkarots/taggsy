@@ -2,16 +2,19 @@
 */__pycache__/
 *.py[cod]
 
+# jupyter 
+.ipynb_checkpoints
+*.ipynb
 # python eggs
 *.egg-info
 
 # Virtualenv
-*.env/
+.env/
 venv/
 
 # Tests
 */nosetests.xml
-*/local_testing.py
+local_testing.py
 
 # vscode
 .vscode/
