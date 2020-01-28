@@ -157,8 +157,8 @@ class Core(DocumentComponent):
         return document.name
 
     def most_common(self):
-        if self.res: return self.res
-        return self.compute()
+        res = self.res if self.res else self.compute()
+        return res
 
     def _compute(self):
         for document in self.documents:

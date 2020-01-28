@@ -15,5 +15,6 @@ setup(
     author_email='michael.karotsieris@gmail.com',
     url='https://github.com/michael-karotsieris/taggsy',
     license=license,
+    setup_requires=['nose==1.0'],
     packages=find_packages(exclude=('tests'))
 )

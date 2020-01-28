@@ -7,6 +7,7 @@
 
 # Virtualenv
 *.env/
+venv/
 
 # Tests
 */nosetests.xml
