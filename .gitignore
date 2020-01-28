@@ -2,12 +2,13 @@
 */__pycache__/
 *.py[cod]
 
+# python eggs
+*.egg-info
 # Virtualenv
 **.env/
 
 # Tests
 nosetests.xml
 
-# Flask stuff:
-instance/
-.webassets-cache
+# vscode
+.vscode/
