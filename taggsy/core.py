@@ -3,7 +3,7 @@ import os
 from .helpers import is_word, is_stopword, filter_stopwords, generate_random_string
 
 SENTENCE_SEPARATOR = '.'
-
+THRESHOLD = 2
 
 class DocumentComponent:
     
@@ -163,6 +163,6 @@ class Core(DocumentComponent):
     def _compute(self):
         for document in self.documents:
             table = document.compute(table=self.table)
-        results = {key: value for key,value in self.table.items() if value['count'] >= 2}
+        results = {key: value for key,value in self.table.items() if value['count'] >= THRESHOLD}
         self.res = {key: value for key, value in sorted(results.items(), key=lambda x: x[1].get('count'), reverse=True)}
         return self.res
