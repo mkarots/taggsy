@@ -9,9 +9,9 @@ from taggy.helpers import filter_stopwords
 
 
 class TaggyCoreTestCase(unittest.TestCase):
-
-    def create_mock(spec=None):
-        return mock.create_autospec(spec=spec)
+    '''
+    Test helpers
+    '''
 
     def create_word(self, text=None, sentence_text=None, document=None):
         return Word(text=text, sentence_text=sentence_text, document=document)
@@ -30,14 +30,15 @@ class TaggyCoreTestCase(unittest.TestCase):
 
 
 class CoreTestCase(TaggyCoreTestCase):
-    """
-    Test core functionality
-    """
+   
     def setUp(self):
         super().setUp()
         self.core = taggy.Core()
     
     def test_simple_documents(self):
+        '''
+        Ensure adding docs works as expected
+        '''
         doc1 = 'Philosophy is cool'
         doc2 = 'Philosophy is awesome'
         self.core.add_document(doc=doc1)
@@ -45,6 +46,9 @@ class CoreTestCase(TaggyCoreTestCase):
         self.assertEqual(len(self.core.documents), 2)
 
     def test_simple_documents_result(self):
+        '''
+        Ensure the result is as expected for a simple case
+        '''
         doc1 = 'Philosophy is cool'
         doc2 = 'Philosophy is awesome'
         doc1_name = self.core.add_document(doc=doc1)
@@ -53,6 +57,9 @@ class CoreTestCase(TaggyCoreTestCase):
         self.assertEqual(self.core.most_common(), expectedResult)
 
     def test_simple_documents_result_second(self):
+        '''
+        Ensure the result is as expected for a simple case
+        '''
         doc1 = 'Philosophy is cool'
         doc2 = 'Philosophy is awesome'
         doc1_name = self.core.add_document(doc=doc1)
@@ -62,6 +69,9 @@ class CoreTestCase(TaggyCoreTestCase):
         self.assertEqual(self.core.most_common(), expectedResult)
 
     def test_multiple_documents(self):
+        '''
+        Ensure correctness when docs > 2
+        '''
         doc1 = 'Philosophy is cool'
         doc2 = 'Philosophy is awesome'
         doc3 = 'Philosophy is nice'
@@ -72,6 +82,9 @@ class CoreTestCase(TaggyCoreTestCase):
         self.assertEqual(self.core.most_common(), expectedResult)
 
     def test_with_path(self):
+        '''
+        Ensure that adding documents from paths works as expected
+        '''
         path1 = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs', 'doca.txt')
         path2 = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs', 'docb.txt')
         self.core.add_document(doc=path1)
@@ -83,12 +96,19 @@ class CoreTestCase(TaggyCoreTestCase):
         self.assertEqual(res, expectedResult)
 
     def test_add_documents(self):
+        '''
+        Ensure add_document is called with the right number of arguments when
+        add_documents is called
+        '''
         docs = ['a', 'b', 'c']
         with mock.patch('taggy.Core.add_document') as mock_add_document:
             self.core.add_documents(docs)
             mock_add_document.assert_has_calls(calls=[mock.call(item) for item in docs])
     
     def test_example_imagination(self):
+        '''
+        Ensure 'imagination' is picked up
+        '''
         path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs', 'test_imagination.json')
         documents = self.get_docs_from_json(path=path)
         self.core.add_documents(documents)
@@ -96,6 +116,9 @@ class CoreTestCase(TaggyCoreTestCase):
         self.assertIn('imagination', res.keys())
 
     def test_example_inspiration(self):
+        '''
+        Ensure 'inspiration' is picked up
+        '''
         path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs', 'test_inspiration.json')
         documents = self.get_docs_from_json(path=path)
         self.core.add_documents(documents)
@@ -103,6 +126,9 @@ class CoreTestCase(TaggyCoreTestCase):
         self.assertIn('inspiration', res.keys())
 
     def test_example_civilisation(self):
+        '''
+        Ensure 'civilization' is picked up
+        '''
         path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs', 'test_civilisation.json')
         documents = self.get_docs_from_json(path=path)
         self.core.add_documents(documents)
@@ -113,6 +139,9 @@ class CoreTestCase(TaggyCoreTestCase):
 class DocumentTestCase(TaggyCoreTestCase):
     
     def test_document_from_path(self):
+        '''
+        Test Document.from_path instantiation
+        '''
         path1 = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs', 'doca.txt')
         with open(path1, 'r') as f:
             text = f.read()
@@ -126,6 +155,9 @@ class DocumentTestCase(TaggyCoreTestCase):
 class SentenceTestCase(TaggyCoreTestCase):
  
     def test_sentence_from_text(self):
+        '''
+        Test Sentence.from_text instantiation
+        '''
         text = 'This is a sentence'
         sentence = Sentence.from_text(text=text, document=None)
         expectedSentence = Sentence(text=text, words=[Word(text='sentence', sentence_text=text)])
@@ -133,10 +165,11 @@ class SentenceTestCase(TaggyCoreTestCase):
 
 
 class WordTestCase(TaggyCoreTestCase):
-    """
-    test word from text
-    """
+
     def test_word_from_text(self):
+        '''
+        Test Word.from_text instantiation
+        '''
         text = 'word'
         expectedWord = Word(text=text)
         self.assertEqual(expectedWord, Word.from_text(text=text))
@@ -144,7 +177,7 @@ class WordTestCase(TaggyCoreTestCase):
 
 class DocumentComponentTestCase(TaggyCoreTestCase):
     """
-    test compute functionality
+    Ensure that calling compute() twice on the component causes _compute to be only called once
     """
     def test_document_component(self):
         component = DocumentComponent()

@@ -7,7 +7,7 @@ with open('LICENSE') as f:
     license = f.read()
 
 setup(
-    name='taggsy',
+    name='taggy',
     version='0.1.0',
     description='Count most common words in a collection of documents',
     long_description=readme,
