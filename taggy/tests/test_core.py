@@ -17,6 +17,12 @@ class TaggyCoreTestCase(unittest.TestCase):
     def create_sentence(self, text=None, words=None, document=None):
         return Sentence(text=text, words=words, document=document)
     
+    def get_docs_from_json(self, path):
+        with open(path, 'r') as f:
+           quotes = json.loads(f.read())
+        documents = [item['quote'] for item in quotes['quotes']]
+        return documents
+
     # def create_document(self, ):
 
 class CoreTestCase(TaggyCoreTestCase):
@@ -73,16 +79,15 @@ class CoreTestCase(TaggyCoreTestCase):
 
 
     def test_add_documents(self):
+        pass
         
 
     def test_examples(self):
         """
         test imagination.json
         """
-        path1 = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs', 'test_imagination.json')
-        with open(path1, 'r') as f:
-           quotes = json.loads(f.read())
-        documents = [item['quote'] for item in quotes['quotes']]
+        path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs', 'test_imagination.json')
+        documents = self.get_docs_from_json(path=path)
         self.core.add_documents(documents)
         res = self.core.most_common()
         self.assertIn('imagination', res.keys())
@@ -91,14 +96,21 @@ class CoreTestCase(TaggyCoreTestCase):
         """
         test inspiration.json
         """
-        path1 = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs', 'test_inspiration.json')
-        with open(path1, 'r') as f:
-           quotes = json.loads(f.read())
-        documents = [item['quote'] for item in quotes['quotes']]
+        path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs', 'test_inspiration.json')
+        documents = self.get_docs_from_json(path=path)
         self.core.add_documents(documents)
         res = self.core.most_common()
         self.assertIn('inspiration', res.keys())
 
+    def test_examples(self):
+        """
+        test civilization.json
+        """
+        path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs', 'test_civilization.json')
+        documents = self.get_docs_from_json(path=path)
+        self.core.add_documents(documents)
+        res = self.core.most_common()
+        self.assertIn('civilization', res.keys())
 
 class DocumentTestCase(TaggyCoreTestCase):
 
