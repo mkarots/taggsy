@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from .context import taggy
+from .context import taggsy
 
 
 class TestFilterStopwords(TestCase):
@@ -10,7 +10,7 @@ class TestFilterStopwords(TestCase):
         Test that stopwords are filtered out
         '''
         word_list = ['this', 'is', 'are']
-        filtered_list = taggy.helpers.filter_stopwords(words=word_list)
+        filtered_list = taggsy.helpers.filter_stopwords(words=word_list)
         self.assertEqual(filtered_list, [])
 
     def test_does_not_filter_out_non_stopwords(self):
@@ -18,7 +18,7 @@ class TestFilterStopwords(TestCase):
         Test that non-stopwords are not filtered out
         '''
         word_list = ['word', 'clarity']
-        filtered_list = taggy.helpers.filter_stopwords(words=word_list)
+        filtered_list = taggsy.helpers.filter_stopwords(words=word_list)
         self.assertEqual(filtered_list, word_list)
 
 if __name__ == "__main__":

@@ -3,9 +3,9 @@ import os
 import unittest
 from unittest import mock
 
-from .context import taggy
-from taggy import Document, Word, Sentence, DocumentComponent
-from taggy.helpers import filter_stopwords
+from .context import taggsy
+from taggsy import Document, Word, Sentence, DocumentComponent
+from taggsy.helpers import filter_stopwords
 
 
 class TaggyCoreTestCase(unittest.TestCase):
@@ -33,7 +33,7 @@ class CoreTestCase(TaggyCoreTestCase):
    
     def setUp(self):
         super().setUp()
-        self.core = taggy.Core()
+        self.core = taggsy.Core()
     
     def test_simple_documents(self):
         '''
@@ -101,7 +101,7 @@ class CoreTestCase(TaggyCoreTestCase):
         add_documents is called
         '''
         docs = ['a', 'b', 'c']
-        with mock.patch('taggy.Core.add_document') as mock_add_document:
+        with mock.patch('taggsy.Core.add_document') as mock_add_document:
             self.core.add_documents(docs)
             mock_add_document.assert_has_calls(calls=[mock.call(item) for item in docs])
     
@@ -181,7 +181,7 @@ class DocumentComponentTestCase(TaggyCoreTestCase):
     """
     def test_document_component(self):
         component = DocumentComponent()
-        with mock.patch('taggy.DocumentComponent._compute') as mocked_compute:
+        with mock.patch('taggsy.DocumentComponent._compute') as mocked_compute:
             component.compute()
             component.compute()
             mocked_compute.assert_called_once()
