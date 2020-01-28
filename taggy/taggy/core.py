@@ -31,10 +31,10 @@ class Word(DocumentComponent):
         self.document = document if document else None
     
     def __str__(self):
-        return f'{self.__class__.__name__!s}(text={self.text!s}, sentence_text={self.sentence_text!s}. document={self.document!s})'
+        return f'{self.__class__.__name__!s}(text={self.text!s}, sentence_text={self.sentence_text!s}, document={self.document!s})'
 
     def __repr__(self):
-        return f'{self.__class__.__name__!r}(text={self.text!r}, sentence_text={self.sentence_text!r}. document={self.document!r})'
+        return f'{self.__class__.__name__!r}(text={self.text!r}, sentence_text={self.sentence_text!r}, document={self.document!r})'
     
     def __eq__(self, other):
         return isinstance(other, self.__class__) and self.text == other.text
@@ -99,7 +99,10 @@ class Document(DocumentComponent):
         self.name = name if name is not None else generate_random_string()
         self.sentences = sentences if sentences is not None else []
         self.text = text if text is not None else ''
-
+    
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.text == other.text
+        
     def __repr__(self):
         return f'{self.__class__.__name__!r}(name={self.name!r}, sentences={self.sentences!r}, text={self.text!r})'
     

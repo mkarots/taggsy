@@ -1,2 +1,2 @@
-from .core import Core, Word, Sentence, Document
+from .core import Core, Word, Sentence, Document, DocumentComponent
 

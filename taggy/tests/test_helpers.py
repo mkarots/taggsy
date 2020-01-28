@@ -1,18 +1,20 @@
-import unittest
+from unittest import TestCase
+
+from .context import taggy
 
 
-class TaggsyHelpersTestCase(unittest.TestCase):
-    pass
+class TestFilterStopwords(TestCase):
 
-class TestIsWord(TaggsyHelpersTestCase):
-    pass
+    def test_filters_out_stopwords(self):
+        word_list = ['this', 'is', 'are']
+        filtered_list = taggy.helpers.filter_stopwords(words=word_list)
+        self.assertEqual(filtered_list, [])
 
+    def test_does_not_filter_out_non_stopwords(self):
+        word_list = ['word', 'clarity']
+        filtered_list = taggy.helpers.filter_stopwords(words=word_list)
+        self.assertEqual(filtered_list, word_list)
 
-class TestIsWord(TaggsyHelpersTestCase):
-    pass
-
-class TestFilterStopwords(TaggsyHelpersTestCase):
-    pass
-
-class TestGenerateRandomString(TaggsyHelpersTestCase):
-    pass
+if __name__ == "__main__":
+    unittest.main()
+    
