@@ -9,8 +9,8 @@
 **.env/
 
 # Tests
-nosetests.xml
-local_testing.py
+*/nosetests.xml
+*/local_testing.py
 
 # vscode
 .vscode/
