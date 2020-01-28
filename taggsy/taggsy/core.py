@@ -134,6 +134,7 @@ class Core(DocumentComponent):
     def __init__(self, documents=None):
         super().__init__()
         self.table = {}
+        self.res = {}
         self.documents = documents if documents is not None else []
 
     def __repr__(self):
@@ -156,11 +157,12 @@ class Core(DocumentComponent):
         return document.name
 
     def most_common(self):
+        if self.res: return self.res
         return self.compute()
 
     def _compute(self):
         for document in self.documents:
             table = document.compute(table=self.table)
         results = {key: value for key,value in self.table.items() if value['count'] >= 2}
-        return {key: value for key, value in sorted(results.items(), key=lambda x: x[1].get('count'), reverse=True)}
-
+        self.res = {key: value for key, value in sorted(results.items(), key=lambda x: x[1].get('count'), reverse=True)}
+        return self.res
